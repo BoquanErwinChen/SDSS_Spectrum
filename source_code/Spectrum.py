@@ -19,3 +19,11 @@ class Spectrum():
 			self.wavelength = 10**hdu_list['COADD'].data['loglam']
 
 
+	@property
+	def rest_wavelength(self):
+		return(self.wavelength / (1 + self.z)) # de-redshift the wavelength array
+
+
+	
+
+
