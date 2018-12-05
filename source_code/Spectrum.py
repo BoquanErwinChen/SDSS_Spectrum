@@ -10,10 +10,10 @@ class Spectrum():
 		with fits.open(self.filename) as hdu_list:
 		
 			self.ra   = hdu_list['PRIMARY'].header['RA']  # degrees
-			self.dec  = hdu_list['PRIMARY'].header['DEC'] # degrees
+			self.dec  = hdu_list['PRIMARY'].header['DEC'] # degrees			
 			
 			self.z    =  hdu_list['SPALL'].data['Z'][0]   # redshift
-
+			
 			flux      = hdu_list['COADD'].data['flux']
 			self.flux = flux / np.nanmedian(flux)         # normalise
 		
@@ -26,14 +26,29 @@ class Spectrum():
 		''' de-redshift the wavelength array '''		
 		return(self.wavelength / (1 + self.z))
 
+	@property
+	def ra_arcsec(self):
+		''' right ascension in arcseconds'''
+		return(self.ra * 36000)
 
-	def separation(self, s):
-		''' Return the angle on the sky between two objects '''
+	@property
+	def dec_arcsec(self):
+		''' declination in arcseconds '''
+		return(self.dec * 36000)
+
+	
+	def separation(self, s, unit='degree'):
+		''' Return the angle on the sky between two objects. defult=degrees '''
+
 		loc1 = SkyCoord(ra=self.ra, dec=self.dec, unit='deg')
 		loc2 = SkyCoord(ra=s.ra, dec=s.dec, unit='deg')
 
-		separation = loc1.separation(loc2)
+		# get the separation in the desired units
+		separation = getattr(loc1.separation(loc2), unit)
+
 		return(separation)
+
+		
 
 
 
