@@ -56,8 +56,7 @@ def test_separation_symmetry(spec1file, spec2file):
 	#Check sky point separation is symmetric
 	np.testing.assert_approx_equal(spec1file.separation(spec2file),spec2file.separation(spec1file))
 
-
-#test that a plot object is returned
-
-#
+def test_flux_sum(spec1file):
+	#Check flux sum is accurate; important since used in making flux plot
+	np.testing.assert_approx_equal(sum(spec1file.flux), 4539.678025157074)
 
