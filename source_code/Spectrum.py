@@ -1,7 +1,26 @@
 from astropy.io import fits
 from astropy.coordinates import SkyCoord
+from astropy.cosmology import FlatLambdaCDM
 from matplotlib import pyplot as plt
 import numpy as np
+
+class SpectrumCosmology():
+	
+	def __init__(self, astropy_cosmology, z=None):
+		self.cosmology = astropy_cosmology
+		self.z = z
+
+	@property
+	def age(self):
+		return(self.cosmology.age(self.z))
+
+	@property
+	def comoving_distance(self):
+		return(self.cosmology.comoving_distance(self.z))
+
+	@property
+	def luminosity_distance(self):
+		return(self.cosmology.luminosity_distance(self.z))
 
 
 class Spectrum():
@@ -20,6 +39,9 @@ class Spectrum():
 		
 			# wavelength in units of Angstroms	
 			self.wavelength = 10**hdu_list['COADD'].data['loglam']
+
+			# standard cosmology
+			self._cosmology = None
 
 	@property
 	def rest_wavelength(self):
@@ -47,6 +69,15 @@ class Spectrum():
 		separation = getattr(loc1.separation(loc2), unit)
 
 		return(separation)
+
+	
+	@property
+	def cosmology(self):
+		if self._cosmology is None:
+			self._cosmology = SpectrumCosmology(FlatLambdaCDM(H0=70, Om0=0.3, Tcmb0=2.725), self.z)
+			self._cosmology.z = self.z
+		return self._cosmology
+
 
 	def hist_flux(self, bins=10, label='Flux', fontsize=15, **kwargs):
 		"""

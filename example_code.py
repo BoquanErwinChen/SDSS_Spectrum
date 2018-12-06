@@ -12,6 +12,11 @@ print("Right ascension and Declination (degrees) \n"
 
 print("Seperation in arcseconds \n"
 	  "-----------------------  \n"
-	  "{0:.2f} arcsec".format(s1.separation(s2, 'arcsec')))
+	  "{0:.2f} arcsec \n".format(s1.separation(s2, 'arcsec')))
+
+print("Age of Universe at that redshift \n"
+	  "-------------------------------- \n"
+	  "redshift : {0:.2f}, age : {1:.2f} \n".format(s1.z, s1.cosmology.age))
+
 
 
