@@ -37,7 +37,7 @@ class Spectrum():
 		return(self.dec * 3600)
 
 
-	def separation(self, s, unit='degree'):
+	def separation(self,s, unit='degree'):
 		''' Return the angle on the sky between two objects. defult=degrees '''
 
 		loc1 = SkyCoord(ra=self.ra, dec=self.dec, unit='deg')
@@ -48,55 +48,143 @@ class Spectrum():
 
 		return(separation)
 
-	def hist_flux(self, bins=10, label='Flux', fontsize=15, **kwargs):
+	def hist_flux(self, bins=10, label='Flux', fontsize=15, figname=None, **kwargs):
 		"""
 		Plot a histogram for flux.
 
-        bins: int or sequence or str, optional
-            Consistent with np.histogram.
+		bins: int or sequence or str, optional
+			Consistent with np.histogram.
 
-        label: str, optional
-            A label for the x axis.
+		label: str, optional
+			A label for the x axis.
 
-        fontsize: int, optional
-            The font size of x label.
+		fontsize: int, optional
+			The font size of x label.
 
-        **kwargs:
-            Other properties in matplotlib.pyplot.hist.
-        """
+		figname: str, optional
+			If not None, the figure will be saved under the specified name.
+
+		**kwargs:
+			Other properties in matplotlib.pyplot.hist.
+		"""
 
 		fig, ax = plt.subplots()
 		ax.hist(self.flux, bins=bins, **kwargs)
 		ax.set_xlabel(label, fontsize=fontsize)
+		if figname is not None:
+			plt.savefig(f'{figname}.png', dpi=300)
 		plt.show()
 
 
-	def plot_wavelength_flux(self, xlabel='Wavelength', ylabel='Flux', fontsize=15, **kwargs):
+	def plot_wavelength_flux(self, xlabel='Wavelength', ylabel='Flux', fontsize=15, figname=None, **kwargs):
 		"""
 		Plot flux over wavelenth.
 
-        xlabel: str, optional
-            A label for the x axis.
+		xlabel: str, optional
+			A label for the x axis.
 
-        ylabel: str, optional
-            A label for the y axis.
+		ylabel: str, optional
+			A label for the y axis.
 
-        fontsize: int, optional
-            The font size of labels.
+		fontsize: int, optional
+			The font size of labels.
 
-        **kwargs:
-            Other properties in matplotlib.pyplot.plot.
-        """
+		figname: str, optional
+			If not None, the figure will be saved under the specified name.
+
+		**kwargs:
+			Other properties in matplotlib.pyplot.plot.
+		"""
 
 		fig, ax = plt.subplots()
 		ax.plot(self.rest_wavelength, self.flux, **kwargs)
 		ax.set_xlabel(xlabel, fontsize=fontsize)
 		ax.set_ylabel(ylabel, fontsize=fontsize)
+		if figname is not None:
+			plt.savefig(f'{figname}.png', dpi=300)
 		plt.show()
 
 
+def scatter_flux(spectra, xlabel='RA (deg)', ylabel='Dec (deg)', cblabel='Total Flux', fontsize=15, figname=None, **kwargs):
+    """
+    Plot sources on the sky colored by total flux.
 
-		
+    spectra: list of objects
+        A list of Spectrum objects.
+
+    xlabel: str, optional
+        A label for the x axis.
+
+    ylabel: str, optional
+        A label for the y axis.
+
+    cblabel: str, optional
+        A label for color bar.
+
+    fontsize: int, optional
+        The font size of labels.
+
+    figname: str, optional
+        If not None, the figure will be saved under the specified name.
+
+    **kwargs:
+        Other properties in matplotlib.pyplot.plot.
+    """
+
+    fig, ax = plt.subplots()
+    ra = [s.ra for s in spectra]
+    dec = [s.dec for s in spectra]
+    c = [sum(s.flux) for s in spectra]
+    sca = ax.scatter(ra, dec, c=c, **kwargs)
+    ax.invert_xaxis()
+    ax.set_xlabel(xlabel, fontsize=fontsize)
+    ax.set_ylabel(ylabel, fontsize=fontsize)
+    cb = fig.colorbar(sca, ax=ax)
+    cb.set_label(cblabel)
+
+    if figname is not None:
+        plt.savefig(f'{figname}.png', dpi=300)
+    plt.show()
+
+def scatter_redshift(spectra, xlabel='RA (deg)', ylabel='Dec (deg)', cblabel='Redshift', fontsize=15, figname=None, **kwargs):
+    """
+    Plot sources on the sky colored by redshift.
+
+    spectra: list of objects
+        A list of Spectrum objects.
+
+    xlabel: str, optional
+        A label for the x axis.
+
+    ylabel: str, optional
+        A label for the y axis.
+
+    cblabel: str, optional
+        A label for color bar.
+
+    fontsize: int, optional
+        The font size of labels.
+
+    figname: str, optional
+        If not None, the figure will be saved under the specified name.
+
+    **kwargs:
+        Other properties in matplotlib.pyplot.plot.
+    """
+
+    fig, ax = plt.subplots()
+    ra = [s.ra for s in spectra]
+    dec = [s.dec for s in spectra]
+    c = [s.z for s in spectra]
+    sca = ax.scatter(ra, dec, c=c, **kwargs)
+    ax.invert_xaxis()
+    ax.set_xlabel(xlabel, fontsize=fontsize)
+    ax.set_ylabel(ylabel, fontsize=fontsize)
+    cb = fig.colorbar(sca, ax=ax)
+    cb.set_label(cblabel)
+    if figname is not None:
+        plt.savefig(f'{figname}.png', dpi=300)
+    plt.show()
 
 
 
