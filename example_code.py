@@ -16,6 +16,16 @@ print("Seperation in arcseconds \n"
 	  "{0:.2f} arcsec".format(s1.separation(s2, 'arcsec')))
 print()
 
+# each spectrum has its own plotting functions
+s1.hist_flux(bins=50)
+s1.plot_wavelength_flux()
+
+# other parameters in matplotlib can be set through a dictionary of keyword arguments
+param = {'cumulative': True, 'histtype': 'step'}
+s1.hist_flux(bins=50, label='Flux', fontsize=15, figname=None, **param)
+param = {'c': 'r', 'linestyle': '--'}
+s1.plot_wavelength_flux(xlabel='Wavelength', ylabel='Flux', fontsize=15, figname=None, **param)
+
 # load all spectra under a directory
 directory_name = 'spectra/'
 directory = os.fsencode(directory_name)
@@ -28,16 +38,6 @@ for file in os.listdir(directory):
 		continue
 	else:
 		continue
-
-# each spectrum has its own plotting functions
-list_spectrum[0].hist_flux(bins=50)
-list_spectrum[0].plot_wavelength_flux()
-
-# other parameters in matplotlib can be set through a dictionary of keyword arguments
-param = {'cumulative': True, 'histtype': 'step'}
-list_spectrum[0].hist_flux(bins=50, label='Flux', fontsize=15, figname=None, **param)
-param = {'c': 'r', 'linestyle': '--'}
-list_spectrum[0].plot_wavelength_flux(xlabel='Wavelength', ylabel='Flux', fontsize=15, figname=None, **param)
 
 # plot multiple spectra on the sky color coded in attributes
 scatter_redshift(list_spectrum)
