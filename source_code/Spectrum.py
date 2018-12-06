@@ -1,5 +1,6 @@
 from astropy.io import fits
 from astropy.coordinates import SkyCoord
+from matplotlib import pyplot as plt
 import numpy as np
 
 
@@ -20,7 +21,6 @@ class Spectrum():
 			# wavelength in units of Angstroms	
 			self.wavelength = 10**hdu_list['COADD'].data['loglam']
 
-
 	@property
 	def rest_wavelength(self):
 		''' de-redshift the wavelength array '''		
@@ -36,7 +36,7 @@ class Spectrum():
 		''' declination in arcseconds '''
 		return(self.dec * 36000)
 
-	
+
 	def separation(self, s, unit='degree'):
 		''' Return the angle on the sky between two objects. defult=degrees '''
 
@@ -47,6 +47,56 @@ class Spectrum():
 		separation = getattr(loc1.separation(loc2), unit)
 
 		return(separation)
+
+	def hist_flux(self, bins=10, label='Flux', fontsize=15, **kwargs):
+		"""
+		Plot a histogram for flux.
+
+        bins: int or sequence or str, optional
+            Consistent with np.histogram.
+
+        label: str, optional
+            A label for the x axis.
+
+        fontsize: int, optional
+            The font size of x label.
+
+        **kwargs:
+            Other properties in matplotlib.pyplot.hist.
+        """
+
+		fig, ax = plt.subplots()
+		ax.hist(self.flux, bins=bins, **kwargs)
+		ax.set_xlabel(label, fontsize=fontsize)
+		plt.show()
+
+
+	def plot_wavelength_flux(self, xlabel='Wavelength', ylabel='Flux', fontsize=15, **kwargs):
+		"""
+		Plot flux over wavelenth.
+
+        xlabel: str, optional
+            A label for the x axis.
+
+        ylabel: str, optional
+            A label for the y axis.
+
+        fontsize: int, optional
+            The font size of labels.
+
+        **kwargs:
+            Other properties in matplotlib.pyplot.plot.
+        """
+
+		fig, ax = plt.subplots()
+		ax.plot(self.rest_wavelength, self.flux, **kwargs)
+		ax.set_xlabel(xlabel, fontsize=fontsize)
+		ax.set_ylabel(ylabel, fontsize=fontsize)
+		plt.show()
+
+
+
+
 
 		
 
