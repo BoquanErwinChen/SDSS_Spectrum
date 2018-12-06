@@ -29,6 +29,20 @@ for file in os.listdir(directory):
 	else:
 		continue
 
-# plot the sources on the sky color coded in attributes
-scatter_flux(list_spectrum)
+# each spectrum has its own plotting functions
+list_spectrum[0].hist_flux(bins=50)
+list_spectrum[0].plot_wavelength_flux()
+
+# other parameters in matplotlib can be set through a dictionary of keyword arguments
+param = {'cumulative': True, 'histtype': 'step'}
+list_spectrum[0].hist_flux(bins=50, label='Flux', fontsize=15, figname=None, **param)
+param = {'c': 'r', 'linestyle': '--'}
+list_spectrum[0].plot_wavelength_flux(xlabel='Wavelength', ylabel='Flux', fontsize=15, figname=None, **param)
+
+# plot multiple spectra on the sky color coded in attributes
 scatter_redshift(list_spectrum)
+
+# other parameters in matplotlib can be set through a dictionary of keyword arguments
+param = {'s': 3, 'linewidth': None, 'alpha': 0.5}
+scatter_flux(list_spectrum, xlabel='RA (deg)', ylabel='Dec (deg)', cblabel='Total Flux', fontsize=15, figname=None,
+			 **param)
