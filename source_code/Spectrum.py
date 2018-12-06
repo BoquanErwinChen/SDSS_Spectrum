@@ -29,12 +29,12 @@ class Spectrum():
 	@property
 	def ra_arcsec(self):
 		''' right ascension in arcseconds'''
-		return(self.ra * 36000)
+		return(self.ra * 3600)
 
 	@property
 	def dec_arcsec(self):
 		''' declination in arcseconds '''
-		return(self.dec * 36000)
+		return(self.dec * 3600)
 
 
 	def separation(self, s, unit='degree'):
