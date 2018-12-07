@@ -73,6 +73,7 @@ class Spectrum():
 	
 	@property
 	def cosmology(self):
+		assert self.z > 0, "Redshift contaimnated by peculiar velocity, not a reliable distance indicator"
 		if self._cosmology is None:
 			self._cosmology = SpectrumCosmology(FlatLambdaCDM(H0=70, Om0=0.3, Tcmb0=2.725), self.z)
 			self._cosmology.z = self.z
