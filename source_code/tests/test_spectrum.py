@@ -18,10 +18,21 @@ def test_dec_bound(spectrumfile):
 	s1 = Spectrum(spectrumfile)
 	assert -90 <= s1.dec <= 90, "DEC is out of bounds"
 
+#def test_redshift_bounds(spectrumfile):
+	#Check that redshift is not negative since big peciliar velocities preclude use as a distance indicator
+#	s1 = Spectrum(spectrumfile)
+#	assert s1.z > 0.0, "Redshift is negative!"
+
+def test_cosmology_redshift(spectrumfile):
+	s1 = Spectrum(spectrumfile)
+	assert s1.cosmology.age is not None, "Age is not calculated; negative redshift check has failed"
+
+
 def test_redshift_bounds(spectrumfile):
 	#Check that redshift is not negative since big peciliar velocities preclude use as a distance indicator
 	s1 = Spectrum(spectrumfile)
 	assert s1.z > 0.0, "Redshift is negative!"
+
 
 def test_flux_data(spectrumfile):
 	#Check that flux data is being read
